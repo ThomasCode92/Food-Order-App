@@ -1,4 +1,6 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
+
+import CartProvider from './store/CartProvider';
 
 import Cart from './components/Cart/Cart';
 import Header from './components/Layout/Header';
@@ -16,13 +18,13 @@ function App() {
   };
 
   return (
-    <Fragment>
+    <CartProvider>
       <Header onShowCart={showCartHandler} />
       {cartIsShown && <Cart onHideCart={hideCartHandler} />}
       <main>
         <Meals />
       </main>
-    </Fragment>
+    </CartProvider>
   );
 }
 
