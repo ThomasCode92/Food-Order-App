@@ -3,19 +3,23 @@ import React, { useEffect, useState } from 'react';
 import Card from '../UI/Card';
 import MealItem from './MealItem/MealItem';
 import classes from './AvailableMeals.module.css';
+import Modal from '../UI/Modal';
 
 const FIREBASE_URL = process.env.REACT_APP_FIREBASE_URL;
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState(null);
 
   useEffect(() => {
     const fetchMeals = async () => {
       const response = await fetch(FIREBASE_URL);
       const responseData = await response.json();
 
-      console.log(responseData);
+      if (!response.ok) {
+        throw new Error('Something went wrong!');
+      }
 
       const loadedMeals = [];
 
@@ -31,7 +35,10 @@ const AvailableMeals = () => {
       setIsLoading(false);
     };
 
-    fetchMeals();
+    fetchMeals().catch(error => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
   }, []);
 
   if (isLoading) {
@@ -39,6 +46,20 @@ const AvailableMeals = () => {
       <section className={classes['meals-loading']}>
         <p>Loading...</p>
       </section>
+    );
+  }
+
+  if (httpError) {
+    const confirmError = () => {
+      setHttpError(false);
+    };
+
+    return (
+      <Modal onCloseModal={confirmError}>
+        <div className={classes['error-message']}>
+          <p>{httpError}</p>
+        </div>
+      </Modal>
     );
   }
 
@@ -54,9 +75,11 @@ const AvailableMeals = () => {
 
   return (
     <section className={classes.meals}>
-      <Card>
-        <ul>{mealsList}</ul>
-      </Card>
+      {mealsList.length > 0 && (
+        <Card>
+          <ul>{mealsList}</ul>
+        </Card>
+      )}
     </section>
   );
 };
