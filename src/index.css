@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+*::-webkit-scrollbar {
+  display: none;
+}
+
 html {
   font-family: 'Noto Sans JP', sans-serif;
 }
