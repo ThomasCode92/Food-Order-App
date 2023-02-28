@@ -30,7 +30,7 @@ const AvailableMeals = () => {
 
   useEffect(() => {
     const fetchMeals = async () => {
-      const response = await fetch(FIREBASE_URL);
+      const response = await fetch(FIREBASE_URL + '/meals.json');
       const responseData = await response.json();
 
       if (!response.ok) {

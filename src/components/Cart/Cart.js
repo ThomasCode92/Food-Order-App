@@ -7,6 +7,8 @@ import CartItem from './CartItem';
 import Checkout from './Checkout';
 import classes from './Cart.module.css';
 
+const FIREBASE_URL = process.env.REACT_APP_FIREBASE_URL;
+
 const Cart = props => {
   const [isCheckout, setIsCheckout] = useState(false);
   const cartContext = useContext(CartContext);
@@ -24,6 +26,16 @@ const Cart = props => {
 
   const orderHandler = () => {
     setIsCheckout(true);
+  };
+
+  const submitOrderHandler = userData => {
+    fetch(FIREBASE_URL + '/orders.json', {
+      method: 'POST',
+      body: JSON.stringify({
+        user: userData,
+        orderedItems: cartContext.items,
+      }),
+    });
   };
 
   const cartItems = (
@@ -59,7 +71,9 @@ const Cart = props => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckout && <Checkout onCancel={props.onHideCart} />}
+      {isCheckout && (
+        <Checkout onConfirm={submitOrderHandler} onCancel={props.onHideCart} />
+      )}
       {!isCheckout && modalActions}
     </Modal>
   );
