@@ -13,9 +13,11 @@ function App() {
     setCartIsShown(true);
   }, []);
 
-  const hideCartHandler = () => {
-    setCartIsShown(false);
-  };
+  const hideCartHandler = useCallback(() => {
+    if (cartIsShown) { // Dummy Example!!!
+      setCartIsShown(false);
+    }
+  }, [cartIsShown]);
 
   return (
     <CartProvider>
