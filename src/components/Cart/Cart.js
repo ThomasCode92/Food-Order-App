@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from 'react';
+import React, { Fragment, useContext, useMemo, useState } from 'react';
 
 import CartContext from '../../store/cart-context';
 
@@ -10,14 +10,28 @@ import classes from './Cart.module.css';
 const FIREBASE_URL = process.env.REACT_APP_FIREBASE_URL;
 
 const Cart = props => {
+  console.log('cart');
   const [isCheckout, setIsCheckout] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [didSubmit, setDidSubmit] = useState(false);
 
   const cartContext = useContext(CartContext);
 
+  const { items } = cartContext;
+
+  const sortedItems = useMemo(() => {
+    return items.sort((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      } else if (b.name > a.name) {
+        return -1;
+      }
+      return 0;
+    });
+  }, [items]);
+
   const totalAmount = `$${cartContext.totalAmount.toFixed(2)}`;
-  const hasItems = cartContext.items.length > 0;
+  const hasItems = items.length > 0;
 
   const cartItemAddHandler = item => {
     cartContext.addItem({ ...item, amount: 1 });
@@ -38,7 +52,7 @@ const Cart = props => {
       method: 'POST',
       body: JSON.stringify({
         user: userData,
-        orderedItems: cartContext.items,
+        orderedItems: items,
       }),
     });
 
@@ -50,7 +64,7 @@ const Cart = props => {
 
   const cartItems = (
     <ul className={classes['cart-items']}>
-      {cartContext.items.map(cartItem => (
+      {sortedItems.map(cartItem => (
         <CartItem
           key={cartItem.id}
           item={cartItem}

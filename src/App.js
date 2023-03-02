@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import CartProvider from './store/CartProvider';
 
@@ -9,13 +9,15 @@ import Meals from './components/Meals/Meals';
 function App() {
   const [cartIsShown, setCartIsShown] = useState(false);
 
-  const showCartHandler = () => {
+  const showCartHandler = useCallback(() => {
     setCartIsShown(true);
-  };
+  }, []);
 
-  const hideCartHandler = () => {
-    setCartIsShown(false);
-  };
+  const hideCartHandler = useCallback(() => {
+    if (cartIsShown) { // Dummy Example!!!
+      setCartIsShown(false);
+    }
+  }, [cartIsShown]);
 
   return (
     <CartProvider>
