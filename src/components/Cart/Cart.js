@@ -7,17 +7,27 @@ import CartItem from './CartItem';
 import Checkout from './Checkout';
 import classes from './Cart.module.css';
 
+import useHttp from '../../hooks/use-http';
+
 const FIREBASE_URL = process.env.REACT_APP_FIREBASE_URL;
 
 const Cart = props => {
-  console.log('cart');
   const [isCheckout, setIsCheckout] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [didSubmit, setDidSubmit] = useState(false);
 
   const cartContext = useContext(CartContext);
-
   const { items } = cartContext;
+
+  const requestConfig = useMemo(() => {
+    console.log('config');
+    return {
+      url: FIREBASE_URL + '/orders.json',
+      method: 'POST',
+    };
+  }, []);
+
+  const httpData = useHttp(requestConfig);
+  const { isLoading, sendRequest: submitOrder } = httpData;
 
   const sortedItems = useMemo(() => {
     return items.sort((a, b) => {
@@ -46,17 +56,12 @@ const Cart = props => {
   };
 
   const submitOrderHandler = async userData => {
-    setIsSubmitting(true);
+    requestConfig.body = {
+      user: userData,
+      orderedItems: items,
+    };
 
-    await fetch(FIREBASE_URL + '/orders.json', {
-      method: 'POST',
-      body: JSON.stringify({
-        user: userData,
-        orderedItems: items,
-      }),
-    });
-
-    setIsSubmitting(false);
+    await submitOrder();
     setDidSubmit(true);
 
     cartContext.clearCart();
@@ -116,8 +121,8 @@ const Cart = props => {
 
   return (
     <Modal onCloseModal={props.onHideCart}>
-      {!isSubmitting && !didSubmit && cartModalContent}
-      {isSubmitting && isSubmittingModalContent}
+      {!isLoading && !didSubmit && cartModalContent}
+      {isLoading && isSubmittingModalContent}
       {didSubmit && didSubmitModalContent}
     </Modal>
   );

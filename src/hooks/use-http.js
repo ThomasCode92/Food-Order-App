@@ -20,7 +20,10 @@ const useHttp = (requestConfig, applyData) => {
       }
 
       const data = await response.json();
-      applyData(data);
+
+      if (applyData) {
+        applyData(data);
+      }
     } catch (error) {
       const errorMessage = error.message || 'Something went wrong';
       setError(errorMessage);
