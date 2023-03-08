@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Card from '../UI/Card';
 import MealItem from './MealItem/MealItem';
@@ -12,8 +12,7 @@ const FIREBASE_URL = process.env.REACT_APP_FIREBASE_URL;
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
 
-  const mealsUrl = FIREBASE_URL + '/meals.json';
-  const transformMeals = mealsObj => {
+  const transformMeals = useCallback(mealsObj => {
     const loadedMeals = [];
 
     for (const key in mealsObj) {
@@ -25,14 +24,18 @@ const AvailableMeals = () => {
     }
 
     setMeals(loadedMeals);
-  };
+  }, []);
 
-  const httpData = useHttp({ url: mealsUrl }, transformMeals);
+  const requestConfig = useMemo(() => {
+    return { url: FIREBASE_URL + '/meals.json' };
+  }, []);
+
+  const httpData = useHttp(requestConfig, transformMeals);
   const { isLoading, error, sendRequest: fetchMeals } = httpData;
 
   useEffect(() => {
     fetchMeals();
-  }, []);
+  }, [fetchMeals]);
 
   if (isLoading) {
     return (
