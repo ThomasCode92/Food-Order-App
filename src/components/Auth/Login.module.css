@@ -1,0 +1,53 @@
+.form {
+  margin: 1rem 0;
+}
+
+.form-control {
+  margin-bottom: 0.5rem;
+}
+
+.form-control label {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.form-control input {
+  font: inherit;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 20rem;
+  max-width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.form-actions button {
+  font: inherit;
+  color: #5a1a01;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  border-radius: 25px;
+  padding: 0.5rem 2rem;
+}
+
+.form-actions button:hover,
+.form-actions button:active {
+  background-color: #ffe6dc;
+}
+
+.form-actions .submit {
+  border: 1px solid #5a1a01;
+  background-color: #5a1a01;
+  color: white;
+}
+
+.form-actions .submit:hover,
+.form-actions .submit:active {
+  background-color: #7a2706;
+}
