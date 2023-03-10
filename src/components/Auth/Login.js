@@ -12,8 +12,12 @@ const Login = props => {
 
   const formSubmissionHandler = event => {
     event.preventDefault();
-    console.log(enteredName);
 
+    if (enteredName.trim() === '') {
+      return;
+    }
+
+    console.log(enteredName);
     setEnteredName('');
   };
 
