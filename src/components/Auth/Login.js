@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Modal from '../UI/Modal';
 import classes from './Login.module.css';
 
 const Login = props => {
   const [enteredName, setEnteredName] = useState('');
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(true);
+  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
+  const [enteredNameTouched, setEnteredNameTouched] = useState(false);
+
+  useEffect(() => {
+    if (enteredNameIsValid) {
+      // Send Http Request...
+      console.log('Name Input is valid');
+    }
+  }, [enteredNameIsValid]);
 
   const nameInputChangeHandler = event => {
     setEnteredName(event.target.value);
@@ -13,6 +21,8 @@ const Login = props => {
 
   const formSubmissionHandler = event => {
     event.preventDefault();
+
+    setEnteredNameTouched(true);
 
     if (enteredName.trim() === '') {
       return setEnteredNameIsValid(false);
@@ -24,9 +34,11 @@ const Login = props => {
     setEnteredName('');
   };
 
-  const nameInputClasses = enteredNameIsValid
-    ? classes['form-control']
-    : `${classes['form-control']} ${classes.invalid}`;
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+
+  const nameInputClasses = nameInputIsInvalid
+    ? `${classes['form-control']} ${classes.invalid}`
+    : classes['form-control'];
 
   return (
     <Modal onCloseModal={props.onHideLogin}>
@@ -39,7 +51,7 @@ const Login = props => {
             value={enteredName}
             onChange={nameInputChangeHandler}
           />
-          {!enteredNameIsValid && (
+          {nameInputIsInvalid && (
             <p className={classes['error-text']}>Name must not be empty!</p>
           )}
         </div>
