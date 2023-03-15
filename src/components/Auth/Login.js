@@ -10,6 +10,11 @@ const Login = props => {
   const enteredNameIsValid = enteredName.trim() !== '';
   const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
+  let formIsValid = false;
+
+  if (enteredNameIsValid) {
+    formIsValid = true;
+  }
   const nameInputBlurHandler = event => {
     setEnteredNameTouched(true);
   };
@@ -51,7 +56,9 @@ const Login = props => {
           )}
         </div>
         <div className={classes['form-actions']}>
-          <button className={classes.submit}>Submit</button>
+          <button className={classes.submit} disabled={!formIsValid}>
+            Submit
+          </button>
         </div>
       </form>
     </Modal>

@@ -18,7 +18,7 @@
   border-radius: 4px;
   width: 20rem;
   max-width: 100%;
-  padding: 0.5rem
+  padding: 0.5rem;
 }
 
 .form-control input:focus {
@@ -55,6 +55,15 @@
 .form-actions .submit:hover,
 .form-actions .submit:active {
   background-color: #7a2706;
+}
+
+.form-actions .submit:disabled,
+.form-actions .submit:disabled:hover,
+.form-actions .submit:disabled:active {
+  background-color: #ccc;
+  color: #292929;
+  border-color: #ccc;
+  cursor: not-allowed;
 }
 
 .invalid input {
