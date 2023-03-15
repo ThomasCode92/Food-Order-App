@@ -1,26 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Modal from '../UI/Modal';
 import classes from './Login.module.css';
 
 const Login = props => {
   const [enteredName, setEnteredName] = useState('');
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
-  useEffect(() => {
-    if (enteredNameIsValid) {
-      // Send Http Request...
-      console.log('Name Input is valid');
-    }
-  }, [enteredNameIsValid]);
+  const enteredNameIsValid = enteredName.trim() !== '';
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
   const nameInputBlurHandler = event => {
     setEnteredNameTouched(true);
-
-    if (enteredName.trim() === '') {
-      return setEnteredNameIsValid(false);
-    }
   };
 
   const nameInputChangeHandler = event => {
@@ -32,17 +23,12 @@ const Login = props => {
 
     setEnteredNameTouched(true);
 
-    if (enteredName.trim() === '') {
-      return setEnteredNameIsValid(false);
-    }
-
-    setEnteredNameIsValid(true);
+    if (!enteredNameIsValid) return;
 
     console.log(enteredName);
     setEnteredName('');
+    setEnteredNameTouched(false);
   };
-
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
   const nameInputClasses = nameInputIsInvalid
     ? `${classes['form-control']} ${classes.invalid}`
