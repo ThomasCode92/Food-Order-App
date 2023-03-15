@@ -15,6 +15,14 @@ const Login = props => {
     }
   }, [enteredNameIsValid]);
 
+  const nameInputBlurHandler = event => {
+    setEnteredNameTouched(true);
+
+    if (enteredName.trim() === '') {
+      return setEnteredNameIsValid(false);
+    }
+  };
+
   const nameInputChangeHandler = event => {
     setEnteredName(event.target.value);
   };
@@ -49,6 +57,7 @@ const Login = props => {
             type="text"
             id="username"
             value={enteredName}
+            onBlur={nameInputBlurHandler}
             onChange={nameInputChangeHandler}
           />
           {nameInputIsInvalid && (

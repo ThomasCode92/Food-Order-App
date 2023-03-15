@@ -20,6 +20,10 @@
   max-width: 100%;
 }
 
+.form-control input:focus {
+  outline: none;
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
